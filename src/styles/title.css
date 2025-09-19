@@ -1,0 +1,33 @@
+.brand-title {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+
+  color: #ffffff;
+  text-shadow:
+    0 0 6px #ff75e4,
+    0 0 16px #ff75e4,
+    0 0 24px #ff75e480;
+
+  transform: rotate(-8deg) skewX(-4deg);
+  transform-origin: top right;
+
+  padding: 6px 18px;
+  border: 2px solid #ff75e4;
+  border-radius: 12px;
+  background: rgba(255, 117, 228, 0.07);
+  box-shadow: 0 0 20px #ff75e430;
+}
+
+.brand-title:hover {
+  text-shadow:
+    0 0 10px #ffb14d,
+    0 0 24px #ffb14d;
+  border-color: #ffb14d;
+  transition: all 0.3s ease;
+}
