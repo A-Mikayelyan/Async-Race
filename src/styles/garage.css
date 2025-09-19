@@ -1,0 +1,100 @@
+.car-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  width: 100%;
+}
+
+.lane-controls {
+  width: 220px;
+  min-width: 220px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.meta {
+  flex: 0 0 220px;
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.meta .name {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.meta .sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.ctrl-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 10px 0 6px;
+}
+.controls-row .pod-create,
+.controls-row .pod-update,
+.controls-row .btn-generate {
+  margin-inline-end: 50px;
+}
+.controls-row .pagination-controls {
+  gap: 12px;
+}
+@media (max-width: 900px) {
+  .controls-row .pod-create,
+  .controls-row .pod-update,
+  .controls-row .btn-generate {
+    margin-inline-end: 14px;
+  }
+}
+
+.car-row .track {
+  border: 0 !important;
+  background: transparent !important;
+}
+.car-row .lane-rails {
+  display: none !important;
+}
+.car-row .track::before,
+.car-row .track::after {
+  content: none !important;
+}
+
+@media (max-width: 1450px) {
+  .header-right-sign,
+  .brand-title {
+    display: none !important;
+  }
+
+  .winners-screen {
+    padding-top: 0 !important;
+  }
+}
+
+@media (max-width: 730px) {
+  .car-row .track,
+  .car-row .lane-rails,
+  .car-row .car-wrap {
+    display: none !important;
+  }
+
+  .lane-controls,
+  .meta {
+    width: auto;
+    min-width: 0;
+  }
+  .meta {
+    flex: 1 1 auto;
+  }
+}

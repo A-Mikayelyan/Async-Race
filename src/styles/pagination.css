@@ -1,0 +1,21 @@
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0 10px;
+}
+.pagination-controls > button {
+  --glow: var(--pink);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 0 6px;
+}
+
+@media (max-width: 768px) {
+  .pagination-controls { flex-wrap: wrap; gap: 8px; }
+}
+

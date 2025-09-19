@@ -1,0 +1,141 @@
+.track {
+  position: relative;
+  flex: 1;
+  min-width: 520px;
+  height: 68px;
+  margin-inline: 8px;
+  overflow: hidden;
+  isolation: isolate;
+  background: transparent !important;
+}
+
+.track::before,
+.track::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  width: 12px;
+  border-left: 3px solid rgba(199, 208, 219, 0.55);
+  border-right: 3px solid rgba(199, 208, 219, 0.55);
+  border-radius: 2px;
+  opacity: 0.95;
+}
+.track::before {
+  left: 10px;
+}
+.track::after {
+  right: 10px;
+}
+
+.lane-rails {
+  position: absolute;
+  left: 34px;
+  right: 34px;
+  top: 16px;
+  bottom: 16px;
+  pointer-events: none;
+  border-top: 3px solid var(--rail);
+  border-bottom: 3px solid var(--rail);
+  opacity: 0.95;
+}
+
+.car-wrap {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(0, -50%);
+  will-change: transform;
+  z-index: 1;
+  filter: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.track--plain {
+  border: 0 !important;
+  background: transparent !important;
+}
+.track--plain::before,
+.track--plain::after {
+  content: none !important;
+}
+.track--plain + .lane-rails {
+  display: none !important;
+}
+
+.car-row {
+  display: grid;
+  grid-template-columns: 220px 220px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .car-row {
+    grid-template-columns: 200px 200px 1fr;
+  }
+  .lane-controls {
+    width: 200px;
+    min-width: 200px;
+  }
+  .meta {
+    flex: 0 0 200px;
+    min-width: 200px;
+  }
+  .track {
+    min-width: 420px;
+    height: 64px;
+  }
+}
+
+@media (max-width: 768px) {
+  .car-row {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "controls meta"
+      "track track";
+  }
+  .lane-controls {
+    grid-area: controls;
+    width: auto;
+    min-width: 0;
+  }
+  .meta {
+    grid-area: meta;
+    min-width: 0;
+  }
+  .track {
+    grid-area: track;
+    min-width: 0;
+    height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .car-row {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "controls"
+      "meta"
+      "track";
+    gap: 8px;
+  }
+  .btn-square {
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+  }
+  .meta .name {
+    font-size: 14px;
+  }
+  .meta .sub {
+    font-size: 11px;
+  }
+  .track {
+    height: 56px;
+  }
+}
