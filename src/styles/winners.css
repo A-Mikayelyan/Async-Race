@@ -1,0 +1,242 @@
+.winners-screen {
+  padding: 32px 24px 40px;
+}
+.screen-title {
+  font-size: 28px;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  transform: translateX(680px);
+}
+
+.table-wrap {
+  overflow: auto;
+  margin-top: 8px;
+  transform: translateX(350px);
+}
+.neon-border {
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 0 12px #ff4dd280;
+}
+
+.winners-table {
+  width: 90% !important;
+  border-collapse: collapse;
+}
+.winners-table thead th {
+  text-align: left;
+  padding: 14px 16px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  border-bottom: 2px solid #ffb14d80;
+  cursor: pointer;
+  user-select: none;
+}
+.winners-table thead th:nth-child(2) {
+  cursor: default;
+}
+
+.winners-table tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.winners-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+.winners-table td.num {
+  width: 72px;
+  color: var(--muted);
+}
+.winners-table td.car img {
+  width: 36px;
+  height: 22px;
+  filter: drop-shadow(0 0 6px var(--cyan));
+}
+.winners-table td.time {
+  font-variant-numeric: tabular-nums;
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 18px;
+  transform: translateX(330px);
+}
+.pager .page-label {
+  letter-spacing: 0.08em;
+}
+.pager .nav {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+.pager .nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.muted {
+  color: var(--muted);
+  text-align: center;
+}
+.error {
+  color: var(--red);
+  text-align: center;
+}
+
+.winners-screen {
+  max-width: 800px;
+  margin: 48px auto 56px;
+  padding: 0 20px;
+}
+
+.screen-title {
+  font-size: 22px;
+  letter-spacing: 0.12em;
+  margin-bottom: 20px;
+}
+
+.table-wrap {
+  margin-top: 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(0, 0, 0, 0.08)
+  );
+  border: 2px solid #ff75e480;
+  border-radius: 14px;
+  box-shadow:
+    0 0 24px 2px #ff75e430,
+    inset 0 0 6px #ffffff10;
+  padding: 10px 10px 0;
+  overflow: hidden;
+}
+
+.winners-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+.winners-table colgroup col:nth-child(1) {
+  width: 80px;
+}
+.winners-table colgroup col:nth-child(2) {
+  width: 120px;
+}
+.winners-table colgroup col:nth-child(3) {
+  width: auto;
+}
+.winners-table colgroup col:nth-child(4) {
+  width: 110px;
+}
+.winners-table colgroup col:nth-child(5) {
+  width: 210px;
+}
+
+.winners-table thead th {
+  text-align: left;
+  padding: 16px 18px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  border-bottom: 2px solid #ffb14db3;
+  user-select: none;
+  cursor: pointer;
+}
+
+.winners-table thead th:nth-child(2) {
+  cursor: default;
+}
+
+.winners-table tbody td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+.winners-table tbody tr {
+  height: 62px;
+}
+.winners-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.winners-table td.num {
+  color: var(--muted);
+}
+.winners-table td.wins {
+  text-align: center;
+}
+.winners-table td.time {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.winners-table td.car {
+  text-align: center;
+}
+.winners-table td.car img {
+  width: 38px;
+  height: 24px;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+}
+
+.muted {
+  color: var(--muted);
+  text-align: center;
+}
+.error {
+  color: var(--red);
+  text-align: center;
+}
+
+.neon-rail {
+  height: 6px;
+  margin-top: 10px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #ff75e4, #ffb14d);
+  opacity: 0.85;
+  box-shadow: 0 0 16px 2px #ff75e470;
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.pager .page-label {
+  letter-spacing: 0.08em;
+}
+.pager .nav {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+.pager .nav:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .winners-screen {
+    padding: 0 12px;
+  }
+  .winners-table colgroup col:nth-child(1) {
+    width: 64px;
+  }
+  .winners-table colgroup col:nth-child(2) {
+    width: 88px;
+  }
+  .winners-table colgroup col:nth-child(4) {
+    width: 86px;
+  }
+  .winners-table colgroup col:nth-child(5) {
+    width: 150px;
+  }
+}

@@ -1,38 +1,52 @@
-import { apiGet, apiPost } from './http';
-import type { CarEntity, Paginated, Car } from './types';
+// src/api/garage.ts
+import type { CarEntity, Paginated } from "./types";
 
-export async function getCars(page = 1, limit = 7): Promise<Paginated<CarEntity>> {
-  
-  const items = await apiGet<CarEntity[]>('/garage', { _page: page, _limit: limit });
-  
-  const res = await fetch((import.meta.env.VITE_API_BASE ?? 'http://127.0.0.1:3000') + '/garage?_page=1&_limit=1');
-  const total = Number(res.headers.get('X-Total-Count') ?? items.length);
+const BASE = import.meta.env.VITE_API_BASE ?? "http://127.0.0.1:3000";
+
+export type CreateCarBody = Omit<CarEntity, "id">;
+
+export type UpdateCarBody = Partial<Omit<CarEntity, "id">>;
+
+export async function getCars(
+  page = 1,
+  limit = 7
+): Promise<Paginated<CarEntity>> {
+  const url = new URL(`${BASE}/garage`);
+  url.searchParams.set("_page", String(page));
+  url.searchParams.set("_limit", String(limit));
+
+  const res = await fetch(url.toString());
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+
+  const items = (await res.json()) as CarEntity[];
+  const total = Number(res.headers.get("X-Total-Count") ?? items.length);
   return { items, total };
 }
 
-export function createCar(data: Car): Promise<CarEntity> {
-    return apiPost<CarEntity>('/garage', data)
-}
-
-export async function apiPatch<T>(path: string, body: unknown): Promise<T> {
-  const base = import.meta.env.VITE_API_BASE ?? 'http://127.0.0.1:3000';
-  const res = await fetch(base + path, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+export async function createCar(body: CreateCarBody): Promise<CarEntity> {
+  const res = await fetch(`${BASE}/garage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-  return res.json() as Promise<T>;
-
-
+  return (await res.json()) as CarEntity;
 }
-export function updateCar(id: number, data: Car): Promise<CarEntity> {
-  return apiPatch<CarEntity>(`/garage/${id}`, data);
+
+export async function updateCar(
+  id: number,
+  body: UpdateCarBody
+): Promise<CarEntity> {
+  const res = await fetch(`${BASE}/garage/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+  return (await res.json()) as CarEntity;
 }
 
 export async function deleteCar(id: number): Promise<void> {
-  const base = import.meta.env.VITE_API_BASE ?? 'http://127.0.0.1:3000';
-  const res = await fetch(`${base}/garage/${id}`, { method: 'DELETE' });
+  const res = await fetch(`${BASE}/garage/${id}`, { method: "DELETE" });
   if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
 }
-

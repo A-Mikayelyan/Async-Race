@@ -1,57 +1,37 @@
 import React from "react";
-import { getCars, updateCar, createCar } from "../api/garage";
+import { getCars, updateCar, createCar, deleteCar } from "../api/garage";
 import type { CarEntity } from "../api/types";
-import { deleteCar } from "../api/garage";
-import { deleteWinner } from "../api/winners";
+import CarRow from "../components/CarRow";
+import { upsertWinner, deleteWinner } from "../api/winners";
+import WinnerOverlay from "../components/WinnerMessage";
 
 const LIMIT = 7;
 
 const BRANDS = [
-  "Tesla",
-  "Ford",
-  "BMW",
-  "Audi",
-  "Toyota",
-  "Honda",
-  "Volvo",
-  "Kia",
-  "Hyundai",
-  "Nissan",
-  "Chevy",
-  "Porsche",
-  "Lexus",
-  "Mazda",
-  "Jaguar",
+  "Tesla","Ford","BMW","Audi","Toyota","Honda","Volvo","Kia",
+  "Hyundai","Nissan","Chevy","Porsche","Lexus","Mazda","Jaguar",
 ];
+
 const MODELS = [
-  "Falcon",
-  "Edge",
-  "Prime",
-  "Bolt",
-  "Roadster",
-  "Neo",
-  "Vector",
-  "Aero",
-  "Pulse",
-  "Nimbus",
-  "Zen",
-  "Orbit",
-  "Vibe",
-  "Nova",
-  "Flux",
+  "Falcon","Edge","Prime","Bolt","Roadster","Neo","Vector","Aero",
+  "Pulse","Nimbus","Zen","Orbit","Vibe","Nova","Flux",
 ];
 
 export default function Garage() {
   const [page, setPage] = React.useState(1);
   const [totalPages, setTotalPages] = React.useState(1);
+
   const [generating, setGenerating] = React.useState(false);
-  const [newName, setNewName] = React.useState("");
-  const [newColor, setNewColor] = React.useState("#808080");
+
+  const [createName, setCreateName] = React.useState("");
+  const [createColor, setCreateColor] = React.useState("#808080");
+
+  const [editName, setEditName] = React.useState("");
+  const [editColor, setEditColor] = React.useState("#808080");
+
   const [creating, setCreating] = React.useState(false);
   const [updating, setUpdating] = React.useState(false);
   const [deletingId, setDeletingId] = React.useState<number | null>(null);
-
-  const nameValid = newName.trim().length >= 1 && newName.trim().length <= 20;
 
   const [cars, setCars] = React.useState<CarEntity[]>([]);
   const [total, setTotal] = React.useState(0);
@@ -59,41 +39,23 @@ export default function Garage() {
   const [error, setError] = React.useState<string | null>(null);
   const [selectedCar, setSelectedCar] = React.useState<CarEntity | null>(null);
 
-  const editMode = selectedCar !== null;
+  const [overlay, setOverlay] = React.useState<{ name: string; seconds: number } | null>(null);
+  const [racing, setRacing] = React.useState(false);
+
+  const startFnsRef = React.useRef<Record<number, () => Promise<number | void>>>({});
+  const stopFnsRef  = React.useRef<Record<number, () => Promise<void>>>({});
 
   const clearSelection = () => {
     setSelectedCar(null);
-    setNewName("");
-    setNewColor("#808080");
+    setEditName("");
+    setEditColor("#808080");
   };
 
-  const onUpdate = async () => {
-    if (!selectedCar) return;
-    if (!nameValid) {
-      alert("Name must be 1-20 characters!");
-      return;
-    }
-
-    try {
-      setUpdating(true);
-      await updateCar(selectedCar.id, {
-        name: newName.trim(),
-        color: newColor,
-      });
-      await load(page);
-      clearSelection();
-    } catch (e) {
-      alert(`Update failed: ${(e as Error).message}`);
-    } finally {
-      setUpdating(false);
-    }
-  };
-
-  async function load(page: number) {
+  async function load(p: number) {
     try {
       setLoading(true);
       setError(null);
-      const { items, total: t } = await getCars(page, LIMIT);
+      const { items, total: t } = await getCars(p, LIMIT);
       setCars(items);
       setTotal(t);
       setTotalPages(Math.max(1, Math.ceil(t / LIMIT)));
@@ -104,19 +66,17 @@ export default function Garage() {
     }
   }
 
-  React.useEffect(() => {
-    void load(page);
-  }, [page]);
+  React.useEffect(() => { void load(page); }, [page]);
+
+  const nameValid = createName.trim().length >= 1 && createName.trim().length <= 20;
+  const editValid  = editName.trim().length  >= 1 && editName.trim().length  <= 20;
 
   async function onCreate() {
-    if (!nameValid) {
-      alert("Name must be 1-20 characters!");
-      return;
-    }
+    if (!nameValid) { alert("Name must be 1-20 characters!"); return; }
     try {
       setCreating(true);
-      await createCar({ name: newName.trim(), color: newColor });
-      setNewName("");
+      await createCar({ name: createName.trim(), color: createColor });
+      setCreateName("");
       await load(page);
     } catch (e) {
       alert(`Create failed: ${(e as Error).message}`);
@@ -125,16 +85,29 @@ export default function Garage() {
     }
   }
 
-  async function onDelete(id: number) {
-    if (!confirm("Delete this car?")) return;
+  const onUpdate = async () => {
+    if (!selectedCar) return;
+    if (!editValid) { alert("Name must be 1-20 characters!"); return; }
+    try {
+      setUpdating(true);
+      await updateCar(selectedCar.id, { name: editName.trim(), color: editColor });
+      await load(page);
+      clearSelection();
+    } catch (e) {
+      alert(`Update failed: ${(e as Error).message}`);
+    } finally {
+      setUpdating(false);
+    }
+  };
 
+  async function onDelete(id: number) {
+    if (racing) return; // guarded; UI already disables during race
+    if (!confirm("Delete this car?")) return;
     try {
       setDeletingId(id);
       await deleteCar(id);
-      await deleteWinner(id);
-
+      try { await deleteWinner(id); } catch {}
       if (selectedCar?.id === id) clearSelection();
-
       await load(page);
     } catch (e) {
       alert(`Deleting failed: ${(e as Error).message}`);
@@ -143,42 +116,29 @@ export default function Garage() {
     }
   }
 
-  const randomColor = (): string => {
-    return (
-      "#" +
-      Math.floor(Math.random() * 0xffffff)
-        .toString(16)
-        .padStart(6, "0")
-    );
-  };
+  const randomColor = (): string =>
+    "#" + Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, "0");
 
   const randomName = (): string => {
-    const brands = BRANDS[Math.floor(Math.random() * BRANDS.length)];
-    const models = MODELS[Math.floor(Math.random() * MODELS.length)];
-    return `${brands} ${models}`;
+    const brand = BRANDS[Math.floor(Math.random() * BRANDS.length)];
+    const model = MODELS[Math.floor(Math.random() * MODELS.length)];
+    return `${brand} ${model}`;
   };
 
   function makeRandomCars(n: number): { name: string; color: string }[] {
-    return Array.from({ length: n }, () => ({
-      name: randomName(),
-      color: randomColor(),
-    }));
+    return Array.from({ length: n }, () => ({ name: randomName(), color: randomColor() }));
   }
 
   async function onGenerate100() {
     try {
       setGenerating(true);
-
-      if (selectedCar) clearSelection;
-
+      if (selectedCar) clearSelection();
       const carsToCreate = makeRandomCars(100);
-      const eachStep = 5;
-
-      for (let i = 0; i < carsToCreate.length; i += eachStep) {
-        const step = carsToCreate.slice(i, i + eachStep);
-        await Promise.allSettled(step.map((c) => createCar(c)));
+      const chunkSize = 5;
+      for (let i = 0; i < carsToCreate.length; i += chunkSize) {
+        const chunk = carsToCreate.slice(i, i + chunkSize);
+        await Promise.allSettled(chunk.map((c) => createCar(c)));
       }
-
       await load(page);
     } catch (e) {
       alert(`Generation failed: ${(e as Error).message}`);
@@ -187,120 +147,183 @@ export default function Garage() {
     }
   }
 
+  async function onRaceAll() {
+    if (racing || cars.length === 0) return;
+    setRacing(true);
+    setOverlay(null);
+
+    const ids = cars.map((c) => c.id);
+    let resolved = false;
+    let remaining = ids.length;
+
+    await new Promise<void>((resolve) => {
+      ids.forEach((id) => {
+        const start = startFnsRef.current[id];
+        if (!start) { if (--remaining === 0 && !resolved) resolve(); return; }
+
+        start()
+          .then((t) => {
+            if (!resolved && typeof t === "number") {
+              resolved = true;
+              const carEntity = cars.find((c) => c.id === id);
+              const seconds = t / 1000;
+              upsertWinner(id, +seconds.toFixed(2)).catch(() => {});
+              setOverlay({ name: carEntity?.name ?? `#${id}`, seconds });
+              resolve();
+            }
+          })
+          .catch(() => {})
+          .finally(() => { if (--remaining === 0 && !resolved) resolve(); });
+      });
+    });
+
+    setRacing(false);
+  }
+
+  async function onResetAll() {
+    const ids = Object.keys(stopFnsRef.current).map(Number);
+    await Promise.allSettled(ids.map((id) => stopFnsRef.current[id]?.()));
+    setOverlay(null);
+    setRacing(false);
+  }
+
   return (
     <div className="garage-container">
-      <h1>Garage ({total})</h1>
+      {/* top row: Race/Reset • Create • Update • Generate + Pagination */}
+      <div
+        className="controls-row"
+        style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", margin: "10px 0 6px" }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <button className="btn-race" onClick={onRaceAll} disabled={racing || cars.length === 0}>Race</button>
+          <button className="btn-reset" onClick={onResetAll} disabled={cars.length === 0}>Reset</button>
+        </div>
 
-      <div className="create-form">
-        <input
-          type="text"
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-          placeholder="Car name"
-          maxLength={20}
-          className="create-input"
-        />
-        <input
-          type="color"
-          value={newColor}
-          onChange={(e) => setNewColor(e.target.value)}
-          title={newColor}
-          className="color-picker"
-        />
-
-        {!editMode && (
-          <button
-            type="button"
-            onClick={onCreate}
-            disabled={!nameValid || creating}
-            className="create-button"
-          >
-            {creating ? "Creating…" : "Create"}
+        <div className="pod pod-create" style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 280 }}>
+          <input
+            type="text"
+            value={createName}
+            onChange={(e) => setCreateName(e.target.value)}
+            placeholder="Type car brand"
+            maxLength={20}
+            className="create-input"
+            style={{ flex: "1 1 200px" }}
+            disabled={racing}
+          />
+          <input
+            type="color"
+            value={createColor}
+            onChange={(e) => setCreateColor(e.target.value)}
+            title={createColor}
+            className="color-picker"
+            disabled={racing}
+          />
+          <button className="create-button" onClick={onCreate} disabled={racing || creating || !nameValid}>
+            Create
           </button>
-        )}
+        </div>
 
-        {editMode && (
-          <>
-            <button
-              type="button"
-              disabled={!nameValid || updating}
-              className="update-button"
-              title="Update (to be implemented next)"
-              onClick={onUpdate}
-            >
-              Update
-            </button>
-            <button
-              type="button"
-              onClick={clearSelection}
-              className="cancel-button"
-              disabled={updating}
-            >
-              Cancel
-            </button>
-          </>
-        )}
-
-        <button
-          className="generate-random"
-          disabled={generating || creating || updating || loading}
-          onClick={onGenerate100}
+        <div
+          className="pod pod-update"
+          style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 280, opacity: selectedCar ? 1 : 0.6 }}
+          title={selectedCar ? "" : "Select a car to enable update"}
         >
-          {generating ? "Generating" : "Generate 100"}
-        </button>
+          <input
+            type="text"
+            value={editName}
+            onChange={(e) => setEditName(e.target.value)}
+            placeholder="Type car brand"
+            maxLength={20}
+            className="create-input"
+            style={{ flex: "1 1 200px" }}
+            disabled={racing || !selectedCar}
+          />
+          <input
+            type="color"
+            value={editColor}
+            onChange={(e) => setEditColor(e.target.value)}
+            title={editColor}
+            className="color-picker"
+            disabled={racing || !selectedCar}
+          />
+          <button
+            className="update-button"
+            onClick={onUpdate}
+            disabled={racing || !selectedCar || updating || !editValid}
+          >
+            Update
+          </button>
+        </div>
+
+        <div style={{ flex: 1 }} />
+
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <button
+            className="generate-random"
+            disabled={racing || generating || creating || updating || loading}
+            onClick={onGenerate100}
+          >
+            Generate Cars
+          </button>
+
+          <div className="pagination-controls compact" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={racing || loading || page === 1}>
+              Prev
+            </button>
+            <span style={{ minWidth: 90, textAlign: "center" }}>
+              Page {page} / {totalPages}
+            </span>
+            <button
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={racing || loading || page >= totalPages}
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
 
       {loading && <p className="loading-text">Loading...</p>}
       {error && <p className="error-text">Error: {error}</p>}
 
-      <div className="pagination-controls">
-        <button
-          onClick={() => setPage((p) => p - 1)}
-          disabled={loading || page === 1}
-        >
-          Prev
-        </button>
-
-        <button
-          onClick={() => setPage((p) => p + 1)}
-          disabled={loading || page === totalPages}
-        >
-          Next
-        </button>
-      </div>
-
-      <ul className="car-list">
+      <section aria-label="Cars" style={{ marginTop: 8 }}>
         {cars.map((car) => {
           const isSelected = selectedCar?.id === car.id;
           return (
-            <li key={car.id} className="car-item">
-              <div
-                className="car-color"
-                style={{ backgroundColor: car.color }}
-              />
-              <strong>#{car.id}</strong> {car.name}
-              <button
-                className={`select-button${isSelected ? " is-selected" : ""}`}
-                disabled={isSelected}
-                onClick={() => {
-                  setSelectedCar(car);
-                  setNewName(car.name);
-                  setNewColor(car.color);
-                }}
-              >
-                {isSelected ? "Selected" : "Select"}
-              </button>
-              <button
-                className="delete-button"
-                onClick={() => onDelete(car.id)}
-                disabled={deletingId === car.id || updating}
-              >
-                {deletingId === car.id ? "Deleting…" : "Delete"}
-              </button>
-            </li>
+            <CarRow
+              key={car.id}
+              car={{ id: car.id, name: car.name, color: car.color }}
+              isSelected={isSelected}
+              isUpdating={updating}
+              isDeleting={deletingId === car.id}
+              onSelect={() => {
+                if (racing) return; // locked while racing
+                setSelectedCar(car);
+                setEditName(car.name);
+                setEditColor(car.color);
+              }}
+              onDelete={() => onDelete(car.id)}
+              onRegister={(id, fns) => {
+                startFnsRef.current[id] = fns.start;
+                stopFnsRef.current[id] = fns.stop;
+              }}
+              onUnregister={(id) => {
+                delete startFnsRef.current[id];
+                delete stopFnsRef.current[id];
+              }}
+              disabled={racing}     // disables local A/B
+              raceLock={racing}     // NEW: locks select/remove during race
+            />
           );
         })}
-      </ul>
+      </section>
+
+      <WinnerOverlay
+        open={!!overlay}
+        name={overlay?.name ?? ""}
+        seconds={overlay?.seconds ?? 0}
+        onClose={() => setOverlay(null)}
+      />
     </div>
   );
 }

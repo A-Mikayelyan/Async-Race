@@ -1,3 +1,6 @@
+import React from "react";
+import "../styles/title.css";
+
 import {
   BrowserRouter,
   Routes,
@@ -8,26 +11,38 @@ import {
 import Garage from "../pages/Garage";
 import Winners from "../pages/Winners";
 
-
 export default function AppRouter() {
   return (
     <BrowserRouter>
-      <header
-        style={{
-          padding: 12,
-          display: "flex",
-          gap: 12,
-          borderBottom: "1px solid #eee",
-        }}
-      >
-        <NavLink to="/garage">Garage</NavLink>
-        <NavLink to="/winners">Winners</NavLink>
+      <div className="brand-title">ASYNC RACE</div>
+
+      <header className="neon-topbar">
+        <nav className="neon-tabs">
+          <NavLink
+            to="/garage"
+            className={({ isActive }) =>
+              `neon-tab${isActive ? " is-active" : ""}`
+            }
+          >
+            Garage
+          </NavLink>
+          <NavLink
+            to="/winners"
+            className={({ isActive }) =>
+              `neon-tab${isActive ? " is-active" : ""}`
+            }
+          >
+            Winners
+          </NavLink>
+        </nav>
       </header>
-      <main style={{ padding: 16 }}>
+
+      <main>
         <Routes>
           <Route path="/" element={<Navigate to="/garage" replace />} />
           <Route path="/garage" element={<Garage />} />
           <Route path="/winners" element={<Winners />} />
+          <Route path="*" element={<Navigate to="/garage" replace />} />
         </Routes>
       </main>
     </BrowserRouter>
