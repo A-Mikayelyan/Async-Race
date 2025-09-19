@@ -42,7 +42,7 @@
 - [+] Prettier setup — 5
 - [+] ESLint (Airbnb/strict TS) — 5
 
-> **My total:** <put your sum here>
+
 
 ---
 
