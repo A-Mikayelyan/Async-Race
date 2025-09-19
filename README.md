@@ -3,7 +3,7 @@
 **Live demo:** https://async-race-dusky.vercel.app/garage
 **Score:** <390 / 400>
 
----
+
 
 ## ✅ Checklist
 
@@ -44,13 +44,11 @@
 
 
 
----
 
 ## 🛠 How to run locally
 
 ```bash
 npm install
-# API base (optional; defaults to http://127.0.0.1:3000)
 echo VITE_API_URL=http://127.0.0.1:3000 > .env.local
 npm run dev
 
