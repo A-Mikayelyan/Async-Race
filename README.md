@@ -1,7 +1,7 @@
 # ASYNC RACE
 
 **Live demo:** https://async-race-dusky.vercel.app/garage
-**Score:** <XXX / 400>
+**Score:** <390 / 400>
 
 ---
 
