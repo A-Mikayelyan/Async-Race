@@ -1,0 +1,65 @@
+.winner-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+}
+.winner-panel {
+  min-width: min(92vw, 560px);
+  padding: 28px 32px;
+  border-radius: 20px;
+  background: #0e1220;
+  border: 2px solid var(--cyan);
+  box-shadow:
+    0 0 24px rgba(45, 244, 255, 0.35),
+    inset 0 0 60px rgba(255, 77, 210, 0.2);
+  text-align: center;
+}
+.winner-title {
+  font-family: "Orbitron", system-ui, sans-serif;
+  letter-spacing: 0.22em;
+  color: #ffd966;
+  text-shadow:
+    0 0 6px #ffd966,
+    0 0 18px #ffd966;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+.winner-name {
+  font-family: "Orbitron", system-ui, sans-serif;
+  letter-spacing: 0.12em;
+  color: var(--green);
+  text-shadow:
+    0 0 6px var(--green),
+    0 0 20px var(--green);
+  font-size: clamp(24px, 5vw, 40px);
+  margin-bottom: 6px;
+}
+.winner-time {
+  font-family: "Orbitron", system-ui, sans-serif;
+  letter-spacing: 0.15em;
+  color: var(--green);
+  text-shadow: 0 0 6px var(--green);
+  font-size: 18px;
+}
+.winner-close {
+  margin-top: 14px;
+  --glow: var(--pink);
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #141720;
+  color: var(--text);
+  box-shadow:
+    0 0 0 1px #000 inset,
+    0 0 12px color-mix(in oklab, var(--glow) 45%, transparent);
+  cursor: pointer;
+}
+.winner-close:hover {
+  transform: translateY(-1px);
+}

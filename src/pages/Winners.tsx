@@ -180,7 +180,7 @@ export default function WinnersPage() {
         </table>
       </div>
 
-      <footer className="pager">
+      {/* <footer className="pager">
         <button
           className="nav"
           disabled={!canPrev}
@@ -196,7 +196,7 @@ export default function WinnersPage() {
         >
           ▶
         </button>
-      </footer>
+      </footer> */}
     </div>
   );
 }

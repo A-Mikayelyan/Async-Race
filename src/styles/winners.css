@@ -240,3 +240,96 @@
     width: 150px;
   }
 }
+
+/* ============ Winners page responsiveness ============ */
+
+/* 1) turn off manual shifts on narrower screens */
+@media (max-width: 1200px) {
+  .winners-screen { max-width: 1100px; margin: 32px auto 48px; padding: 0 16px; }
+  .screen-title,
+  .table-wrap,
+  .pager { transform: none; }           /* undo translateX on small screens */
+  .winners-table { width: 100% !important; }
+}
+
+/* 2) medium screens – keep table tidy, tighten some columns */
+@media (max-width: 1024px) {
+  .winners-table colgroup col:nth-child(2) { width: 100px; } /* CAR */
+  .winners-table colgroup col:nth-child(5) { width: 170px; } /* TIME */
+}
+
+/* 3) tablets – allow horizontal scroll and hide № column */
+@media (max-width: 900px) {
+  .table-wrap { overflow-x: auto; }
+  .winners-table { min-width: 640px; }  /* prevent cramping */
+  /* hide first col (№) */
+  .winners-table thead th:first-child,
+  .winners-table tbody td:first-child { display: none; }
+  .winners-table colgroup col:nth-child(1) { width: 0 !important; }
+}
+
+/* 4) small phones – hide CAR column (keep NAME + WINS + TIME) */
+@media (max-width: 560px) {
+  .winners-table thead th:nth-child(2),
+  .winners-table tbody td:nth-child(2) { display: none; }
+  .winners-table colgroup col:nth-child(2) { width: 0 !important; }
+  .winners-table colgroup col:nth-child(5) { width: 150px; } /* TIME a bit tighter */
+  .screen-title { font-size: 20px; }
+}
+
+/* 5) very small phones – hide WINS (show NAME + TIME only) */
+@media (max-width: 440px) {
+  .winners-table thead th:nth-child(4),
+  .winners-table tbody td:nth-child(4) { display: none; }
+  .winners-table colgroup col:nth-child(4) { width: 0 !important; }
+  .pager { gap: 12px; }
+}
+
+
+/* --- Winners: prevent overlap with the slanted sign --- */
+@media (max-width: 900px) {
+  /* give the page a bit of top space so the sign doesn't cover it */
+  .winners-screen { padding-top: 72px; }
+  /* remove any manual shifts if they are still applied somewhere */
+  .screen-title,
+  .table-wrap,
+  .pager { transform: none !important; }
+}
+
+/* --- Winners: keep header single-line so columns don't collide --- */
+@media (max-width: 900px) {
+  .winners-table thead th {
+    white-space: nowrap;          /* no wrapping = no collision */
+    overflow: hidden;             /* clip overflow */
+    text-overflow: ellipsis;      /* add … if it’s too long */
+  }
+}
+
+/* tighten header font + padding as screens shrink */
+@media (max-width: 600px) {
+  .winners-table thead th { font-size: 13px; padding: 12px 12px; }
+}
+
+/* keep table readable: progressive column pruning (№ → CAR → WINS) */
+@media (max-width: 900px) {             /* hide № */
+  .winners-table thead th:first-child,
+  .winners-table tbody td:first-child { display: none; }
+  .winners-table colgroup col:nth-child(1) { width: 0 !important; }
+}
+@media (max-width: 560px) {             /* hide CAR */
+  .winners-table thead th:nth-child(2),
+  .winners-table tbody td:nth-child(2) { display: none; }
+  .winners-table colgroup col:nth-child(2) { width: 0 !important; }
+}
+@media (max-width: 440px) {             /* hide WINS */
+  .winners-table thead th:nth-child(4),
+  .winners-table tbody td:nth-child(4) { display: none; }
+  .winners-table colgroup col:nth-child(4) { width: 0 !important; }
+}
+
+/* ensure the table can scroll horizontally when needed */
+@media (max-width: 900px) {
+  .table-wrap { overflow-x: auto; }
+  .winners-table { min-width: 640px; width: 100% !important; }
+}
+

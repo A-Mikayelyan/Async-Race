@@ -1,0 +1,85 @@
+.neon-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: transparent;
+  backdrop-filter: none;
+  padding: 10px 16px 6px;
+}
+.neon-topbar,
+.neon-topbar::after {
+  border: 0 !important;
+}
+
+.neon-tabs {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.neon-tab {
+  --glow: var(--cyan);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 12px;
+  border: 2px solid color-mix(in oklab, var(--glow) 60%, #ffffff10);
+  background: #10131b;
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow:
+    0 0 0 1px #000 inset,
+    0 0 14px color-mix(in oklab, var(--glow) 35%, transparent),
+    0 0 36px color-mix(in oklab, var(--glow) 25%, transparent);
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.2s ease,
+    color 0.2s;
+}
+.neon-tab:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px #000 inset,
+    0 0 20px color-mix(in oklab, var(--glow) 55%, transparent),
+    0 0 50px color-mix(in oklab, var(--glow) 35%, transparent);
+}
+.neon-tab.is-active {
+  color: #111;
+  background: radial-gradient(
+      120% 120% at 50% 50%,
+      color-mix(in oklab, var(--glow) 45%, transparent),
+      transparent 60%
+    ),
+    #d9ffff;
+  text-shadow: none;
+  box-shadow:
+    0 0 0 1px #000 inset,
+    0 0 26px color-mix(in oklab, var(--glow) 65%, transparent),
+    0 0 70px color-mix(in oklab, var(--glow) 40%, transparent);
+  border-color: color-mix(in oklab, var(--glow) 70%, #ffffff10);
+}
+
+@media (max-width: 768px) {
+  .neon-tabs {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .neon-tab {
+    min-width: 104px;
+    height: 40px;
+    padding: 0 14px;
+  }
+}
+@media (max-width: 480px) {
+  .neon-tab {
+    min-width: 96px;
+    height: 36px;
+    padding: 0 12px;
+    font-size: 12px;
+  }
+}

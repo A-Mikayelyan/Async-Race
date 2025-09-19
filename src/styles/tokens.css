@@ -1,0 +1,29 @@
+:root {
+  --bg: #0f1116;
+  --panel: #141720;
+  --line: #2a2f3a;
+  --text: #e9ecf1;
+  --muted: #9aa3ad;
+
+  --cyan: #2df4ff;
+  --pink: #ff4dd2;
+  --green: #55ff88;
+  --orange: #ffb14d;
+  --red: #ff6b6b;
+
+  --rail: #c7d0db70;
+
+  --page-shift: 108px;
+}
+
+:root {
+  --bp-xl: 1280px;
+  --bp-lg: 1024px;
+  --bp-md: 768px;
+  --bp-sm: 640px;
+  --bp-xs: 480px;
+
+  --fs-title: clamp(28px, 4.5vw, 56px);
+  --fs-h1: clamp(22px, 3.5vw, 36px);
+  --fs-body: clamp(14px, 1.5vw, 16px);
+}

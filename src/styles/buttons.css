@@ -1,0 +1,168 @@
+button,
+.create-button,
+.update-button,
+.cancel-button,
+.generate-random,
+.select-button,
+.delete-button {
+  --glow: var(--cyan);
+  appearance: none;
+  border: 1px solid var(--line);
+  background: #141720;
+  color: var(--text);
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    transform 0.06s ease,
+    box-shadow 0.2s;
+  box-shadow:
+    0 0 0 1px #000 inset,
+    0 0 10px color-mix(in oklab, var(--glow) 30%, transparent);
+}
+button:hover,
+.create-button:hover,
+.update-button:hover,
+.cancel-button:hover,
+.generate-random:hover,
+.select-button:hover,
+.delete-button:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px #000 inset,
+    0 0 14px color-mix(in oklab, var(--glow) 50%, transparent),
+    0 0 40px color-mix(in oklab, var(--glow) 30%, transparent);
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.generate-random {
+  --glow: var(--orange);
+}
+.update-button {
+  --glow: var(--cyan);
+}
+.cancel-button {
+  --glow: var(--pink);
+}
+.select-button {
+  --glow: var(--cyan);
+}
+.delete-button {
+  --glow: var(--red);
+}
+.btn-race {
+  --glow: var(--green);
+}
+.btn-reset {
+  --glow: var(--pink);
+}
+
+.winner-badge {
+  font-size: 14px;
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  box-shadow: 0 0 10px rgba(85, 255, 136, 0.25);
+}
+
+.btn-pill.small {
+  --glow: var(--cyan);
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #141720;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  box-shadow:
+    0 0 0 1px #000 inset,
+    0 0 10px color-mix(in oklab, var(--glow) 35%, transparent);
+}
+.btn-pill.small:hover {
+  transform: translateY(-1px);
+}
+.btn-pill.small.danger {
+  --glow: var(--red);
+}
+.btn-pill.small.is-selected {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-square {
+  --glow: var(--green);
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #141720;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+  font-weight: 900;
+  font-size: 14px;
+  box-shadow:
+    0 0 0 1px #000 inset,
+    0 0 10px color-mix(in oklab, var(--glow) 35%, transparent);
+}
+.btn-square.keyA {
+  --glow: var(--green);
+}
+.btn-square.keyB {
+  --glow: var(--pink);
+}
+.btn-square:hover {
+  transform: translateY(-1px);
+}
+.btn-square:disabled {
+  opacity: 0.45;
+  transform: none;
+}
+
+@media (max-width: 1024px) {
+  button,
+  .create-button,
+  .update-button,
+  .cancel-button,
+  .generate-random,
+  .select-button,
+  .delete-button {
+    height: 34px;
+    padding: 0 12px;
+  }
+}
+@media (max-width: 768px) {
+  button,
+  .create-button,
+  .update-button,
+  .cancel-button,
+  .generate-random,
+  .select-button,
+  .delete-button {
+    height: 32px;
+    padding: 0 10px;
+    font-size: 14px;
+  }
+  .btn-square {
+    width: 28px;
+    height: 28px;
+  }
+}
+@media (max-width: 480px) {
+  .btn-pill.small {
+    height: 26px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+}

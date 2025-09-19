@@ -1,0 +1,46 @@
+html,
+body {
+  background: radial-gradient(
+      1200px 600px at 20% -10%,
+      #1b2040 0%,
+      transparent 60%
+    ),
+    radial-gradient(800px 400px at 90% 0%, #442250 0%, transparent 55%),
+    var(--bg);
+  color: var(--text);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    "Apple Color Emoji",
+    "Segoe UI Emoji";
+}
+a {
+  color: var(--cyan);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+
+body {
+  font-size: var(--fs-body);
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+@media (hover: none) and (pointer: coarse) {
+  .neon-tab:hover,
+  button:hover,
+  .btn-pill.small:hover,
+  .btn-square:hover {
+    transform: none;
+  }
+}
