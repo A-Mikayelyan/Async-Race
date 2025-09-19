@@ -1,7 +1,7 @@
 import React from "react";
 import { getWinners } from "../api/winners";
 import type { WinnerView, SortKey, SortOrder } from "../api/types";
-import CarIcon from "../assets/car.svg";
+import CarIcon from "../assets/Car.svg";
 import "../styles/winners.css";
 
 const PAGE_SIZE = 10;
