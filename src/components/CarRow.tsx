@@ -84,15 +84,15 @@ export default function CarRow({
         </button>
       </div>
 
-      {/* Track/lane */}
+      
       <div ref={trackRef} className="track">
-        {/* (rails removed per your style) */}
+        
         <div ref={carRef} className="car-wrap">
           <CarIcon width={90} height={50} style={{ fill: car.color }} />
         </div>
       </div>
 
-      {/* Right meta */}
+      
       <div className="meta">
         <div>
           <div className="name">{car.name}</div>
